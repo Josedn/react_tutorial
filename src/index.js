@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
+  let className = "square";
+  if (props.darkened) {
+    className += " dark";
+  }
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className={className} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -15,6 +19,7 @@ class Board extends React.Component {
     return (
       <Square
         value={this.props.squares[i]}
+        darkened={this.props.winnerSquares.includes(i)}
         onClick={() => this.props.onClick(i)}
       />
     );
@@ -98,7 +103,7 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      status = 'Winner: ' + winner;
+      status = 'Winner: ' + winner.winner;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
@@ -108,6 +113,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
+            winnerSquares={winner ? winner.squares : []}
             onClick={(i) => this.handleClick(i)}
           />
         </div>
@@ -141,7 +147,7 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { winner: squares[a], squares: lines[i] }
     }
   }
   return null;
