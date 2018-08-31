@@ -52,7 +52,8 @@ class Game extends React.Component {
         action: "game start"
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      isAscending: true
     };
   }
 
@@ -81,12 +82,20 @@ class Game extends React.Component {
     });
   }
 
+  toggleOrder() {
+    this.setState({
+      isAscending: !this.state.isAscending
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    let actualMoves = this.state.isAscending ? history : history.slice().reverse();
+
+    const moves = actualMoves.map((step, move) => {
       const desc = 'Go to ' + step.action;
 
       let button =
@@ -120,6 +129,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <br/>
+          <div><a role="button" tabIndex={0} className="link" onClick={() => this.toggleOrder()}>{this.state.isAscending ? "Ascending" : "Descending"}</a></div>
           <ol>{moves}</ol>
         </div>
       </div>

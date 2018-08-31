@@ -17,6 +17,16 @@ ol, ul {
   margin-bottom: 10px;
 }
 
+.link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  background: transparent;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
 .square {
   background: #fff;
   border: 1px solid #999;
